@@ -1,0 +1,308 @@
+&lt;!DOCTYPE html&gt;
+&lt;html lang="en"&gt;
+&lt;head&gt;
+    &lt;meta charset="UTF-8"&gt;
+    &lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;
+    &lt;title&gt;TwentySeed Digital — Job Profitability Calculator &amp;amp; Estimating Workbook&lt;/title&gt;
+    &lt;style&gt;
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, sans-serif; line-height: 1.6; color: #1a1a2e; background: #f8f9fa; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
+        header { background: linear-gradient(135deg, #0a1628 0%, #1a3a5c 100%); color: white; padding: 20px 0; position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 20px rgba(0,0,0,0.3); }
+        .header-content { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; }
+        .logo { font-size: 1.8rem; font-weight: 800; letter-spacing: 1px; }
+        .logo span { color: #4cc9f0; }
+        nav { display: flex; gap: 25px; flex-wrap: wrap; }
+        nav a { color: rgba(255,255,255,0.8); text-decoration: none; font-weight: 500; transition: color 0.3s; }
+        nav a:hover { color: #4cc9f0; }
+        .hero { background: linear-gradient(135deg, #0a1628 0%, #1a3a5c 100%); color: white; padding: 100px 0 80px; text-align: center; }
+        .hero h1 { font-size: 3rem; margin-bottom: 20px; font-weight: 800; }
+        .hero h1 span { color: #4cc9f0; }
+        .hero p { font-size: 1.3rem; max-width: 700px; margin: 0 auto 40px; color: rgba(255,255,255,0.85); }
+        .btn { display: inline-block; padding: 16px 40px; border-radius: 50px; text-decoration: none; font-weight: 700; font-size: 1.1rem; transition: all 0.3s ease; cursor: pointer; border: none; }
+        .btn-primary { background: #4cc9f0; color: #0a1628; }
+        .btn-primary:hover { background: #3ab0d8; transform: translateY(-2px); box-shadow: 0 10px 30px rgba(76,201,240,0.4); }
+        .btn-secondary { background: transparent; color: white; border: 2px solid rgba(255,255,255,0.4); }
+        .btn-secondary:hover { border-color: #4cc9f0; color: #4cc9f0; }
+        .btn-cta { background: #f72585; color: white; }
+        .btn-cta:hover { background: #d91a70; transform: translateY(-2px); box-shadow: 0 10px 30px rgba(247,37,133,0.4); }
+        section { padding: 80px 0; }
+        section:nth-child(even) { background: white; }
+        .section-title { text-align: center; margin-bottom: 60px; }
+        .section-title h2 { font-size: 2.5rem; font-weight: 800; margin-bottom: 15px; color: #0a1628; }
+        .section-title p { font-size: 1.15rem; color: #666; max-width: 600px; margin: 0 auto; }
+        .features { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 30px; margin-top: 40px; }
+        .feature-card { background: white; padding: 40px 30px; border-radius: 16px; text-align: center; box-shadow: 0 5px 30px rgba(0,0,0,0.08); transition: transform 0.3s, box-shadow 0.3s; }
+        .feature-card:hover { transform: translateY(-5px); box-shadow: 0 15px 40px rgba(0,0,0,0.12); }
+        .feature-icon { font-size: 3rem; margin-bottom: 20px; }
+        .feature-card h3 { font-size: 1.4rem; margin-bottom: 12px; color: #0a1628; }
+        .feature-card p { color: #666; }
+        .calculator-section { background: linear-gradient(135deg, #f0f4f8 0%, #e8edf3 100%); }
+        .calculator-wrapper { max-width: 900px; margin: 0 auto; background: white; border-radius: 20px; padding: 50px 40px; box-shadow: 0 20px 60px rgba(0,0,0,0.1); }
+        .calc-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 25px; }
+        .form-group { display: flex; flex-direction: column; }
+        .form-group label { font-weight: 600; margin-bottom: 8px; color: #0a1628; font-size: 0.95rem; }
+        .form-group label .unit { font-weight: 400; color: #888; font-size: 0.85rem; }
+        .form-group input { padding: 14px 16px; border: 2px solid #e0e0e0; border-radius: 10px; font-size: 1.1rem; transition: border-color 0.3s; }
+        .form-group input:focus { outline: none; border-color: #4cc9f0; }
+        .form-group input.error { border-color: #f72585; }
+        .results-panel { background: linear-gradient(135deg, #0a1628, #1a3a5c); color: white; border-radius: 16px; padding: 40px; margin-top: 40px; }
+        .results-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 30px; }
+        .result-item { text-align: center; }
+        .result-item .label { font-size: 0.9rem; color: rgba(255,255,255,0.7); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; }
+        .result-item .value { font-size: 2rem; font-weight: 800; color: #4cc9f0; }
+        .result-item .value.highlight { color: #f72585; }
+        .result-item .value.profit { color: #06d6a0; }
+        .pricing-section { background: linear-gradient(135deg, #0a1628 0%, #1a3a5c 100%); color: white; text-align: center; }
+        .pricing-card { max-width: 550px; margin: 0 auto; background: white; color: #1a1a2e; border-radius: 24px; padding: 60px 50px; box-shadow: 0 30px 80px rgba(0,0,0,0.3); position: relative; overflow: hidden; }
+        .pricing-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 5px; background: linear-gradient(90deg, #4cc9f0, #f72585); }
+        .pricing-badge { position: absolute; top: 20px; right: -35px; background: #f72585; color: white; padding: 6px 50px; transform: rotate(45deg); font-size: 0.8rem; font-weight: 700; }
+        .pricing-card h3 { font-size: 1.8rem; margin-bottom: 10px; color: #0a1628; }
+        .price { font-size: 4rem; font-weight: 900; color: #0a1628; margin: 20px 0; }
+        .price sup { font-size: 1.5rem; vertical-align: super; }
+        .price-sub { color: #888; margin-bottom: 30px; font-size: 1.1rem; }
+        .pricing-features { list-style: none; margin-bottom: 35px; text-align: left; }
+        .pricing-features li { padding: 10px 0; border-bottom: 1px solid #eee; display: flex; align-items: center; gap: 10px; }
+        .pricing-features li::before { content: '✓'; color: #06d6a0; font-weight: 700; font-size: 1.2rem; }
+        .footer { background: #0a1628; color: rgba(255,255,255,0.6); padding: 40px 0; text-align: center; font-size: 0.95rem; }
+        .footer a { color: #4cc9f0; text-decoration: none; }
+        @media (max-width: 768px) { .hero h1 { font-size: 2rem; } .hero p { font-size: 1.1rem; } .section-title h2 { font-size: 1.8rem; } .calculator-wrapper { padding: 30px 20px; } .results-panel { padding: 25px 20px; } .pricing-card { padding: 40px 25px; } .price { font-size: 3rem; } nav { gap: 15px; } }
+    &lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;header&gt;
+        &lt;div class="container"&gt;
+            &lt;div class="header-content"&gt;
+                &lt;div class="logo"&gt;TwentySeed &lt;span&gt;Digital&lt;/span&gt;&lt;/div&gt;
+                &lt;nav&gt;
+                    &lt;a href="#features"&gt;Features&lt;/a&gt;
+                    &lt;a href="#calculator"&gt;Calculator&lt;/a&gt;
+                    &lt;a href="#pricing"&gt;Pricing&lt;/a&gt;
+                &lt;/nav&gt;
+            &lt;/div&gt;
+        &lt;/div&gt;
+    &lt;/header&gt;
+
+    &lt;section class="hero"&gt;
+        &lt;div class="container"&gt;
+            &lt;h1&gt;Smart Estimating for &lt;span&gt;Profitable Jobs&lt;/span&gt;&lt;/h1&gt;
+            &lt;p&gt;Stop guessing. TwentySeed Digital's free job-profit calculator helps you price every project with confidence — so you earn what you're worth.&lt;/p&gt;
+            &lt;a href="#calculator" class="btn btn-primary"&gt;Try the Free Calculator&lt;/a&gt;
+            &lt;span style="margin: 0 15px; opacity: 0.5;"&gt;|&lt;/span&gt;
+            &lt;a href="#pricing" class="btn btn-secondary"&gt;Get the Excel Workbook — $79&lt;/a&gt;
+        &lt;/div&gt;
+    &lt;/section&gt;
+
+    &lt;section id="features"&gt;
+        &lt;div class="container"&gt;
+            &lt;div class="section-title"&gt;
+                &lt;h2&gt;Why Choose TwentySeed Digital?&lt;/h2&gt;
+                &lt;p&gt;Built for contractors, tradespeople, and service businesses who demand accurate, profitable quotes every time.&lt;/p&gt;
+            &lt;/div&gt;
+            &lt;div class="features"&gt;
+                &lt;div class="feature-card"&gt;
+                    &lt;div class="feature-icon"&gt;📊&lt;/div&gt;
+                    &lt;h3&gt;Instant Job Calculator&lt;/h3&gt;
+                    &lt;p&gt;Enter materials, labor hours, hourly costs, and expenses to instantly see your total cost, recommended quote, and projected profit.&lt;/p&gt;
+                &lt;/div&gt;
+                &lt;div class="feature-card"&gt;
+                    &lt;div class="feature-icon"&gt;🎯&lt;/div&gt;
+                    &lt;h3&gt;Margin-Driven Pricing&lt;/h3&gt;
+                    &lt;p&gt;Set your target gross margin and let the calculator reverse-engineer the perfect quote price — no more underbidding yourself.&lt;/p&gt;
+                &lt;/div&gt;
+                &lt;div class="feature-card"&gt;
+                    &lt;div class="feature-icon"&gt;📁&lt;/div&gt;
+                    &lt;h3&gt;Excel Estimating Workbook&lt;/h3&gt;
+                    &lt;p&gt;Get a fully customized Excel workbook with automated formulas, customer-ready quote generation, and professional formatting — only $79.&lt;/p&gt;
+                &lt;/div&gt;
+                &lt;div class="feature-card"&gt;
+                    &lt;div class="feature-icon"&gt;💰&lt;/div&gt;
+                    &lt;h3&gt;Zero Recurring Fees&lt;/h3&gt;
+                    &lt;p&gt;One-time purchase. No subscriptions. No hidden costs. Own your estimating tools forever with a single payment.&lt;/p&gt;
+                &lt;/div&gt;
+            &lt;/div&gt;
+        &lt;/div&gt;
+    &lt;/section&gt;
+
+    &lt;section id="calculator" class="calculator-section"&gt;
+        &lt;div class="container"&gt;
+            &lt;div class="section-title"&gt;
+                &lt;h2&gt;Free Job-Profit Calculator&lt;/h2&gt;
+                &lt;p&gt;Enter your job details below to calculate total cost, recommended quote price, and projected profit.&lt;/p&gt;
+            &lt;/div&gt;
+            &lt;div class="calculator-wrapper"&gt;
+                &lt;div class="calc-grid"&gt;
+                    &lt;div class="form-group"&gt;
+                        &lt;label&gt;Materials Cost &lt;span class="unit"&gt;($)&lt;/span&gt;&lt;/label&gt;
+                        &lt;input type="number" id="materials" placeholder="0.00" min="0" step="0.01"&gt;
+                    &lt;/div&gt;
+                    &lt;div class="form-group"&gt;
+                        &lt;label&gt;Labor Hours &lt;span class="unit"&gt;(hours)&lt;/span&gt;&lt;/label&gt;
+                        &lt;input type="number" id="laborHours" placeholder="0" min="0" step="0.5"&gt;
+                    &lt;/div&gt;
+                    &lt;div class="form-group"&gt;
+                        &lt;label&gt;Hourly Labor Cost &lt;span class="unit"&gt;($/hr)&lt;/span&gt;&lt;/label&gt;
+                        &lt;input type="number" id="hourlyCost" placeholder="0.00" min="0" step="0.01"&gt;
+                    &lt;/div&gt;
+                    &lt;div class="form-group"&gt;
+                        &lt;label&gt;Other Expenses &lt;span class="unit"&gt;($)&lt;/span&gt;&lt;/label&gt;
+                        &lt;input type="number" id="otherExpenses" placeholder="0.00" min="0" step="0.01"&gt;
+                    &lt;/div&gt;
+                    &lt;div class="form-group"&gt;
+                        &lt;label&gt;Overhead &lt;span class="unit"&gt;($)&lt;/span&gt;&lt;/label&gt;
+                        &lt;input type="number" id="overhead" placeholder="0.00" min="0" step="0.01"&gt;
+                    &lt;/div&gt;
+                    &lt;div class="form-group"&gt;
+                        &lt;label&gt;Target Gross Margin &lt;span class="unit"&gt;(%&lt;/span&gt;&lt;/label&gt;
+                        &lt;input type="number" id="targetMargin" placeholder="30" min="0" max="99.99" step="0.1"&gt;
+                    &lt;/div&gt;
+                &lt;/div&gt;
+                &lt;div style="text-align: center; margin-top: 35px;"&gt;
+                    &lt;button class="btn btn-primary" onclick="calculate()" style="font-size: 1.2rem; padding: 18px 50px;"&gt;Calculate Profit&lt;/button&gt;
+                &lt;/div&gt;
+                &lt;div class="results-panel" id="results" style="display: none;"&gt;
+                    &lt;div class="results-grid"&gt;
+                        &lt;div class="result-item"&gt;
+                            &lt;div class="label"&gt;Total Cost&lt;/div&gt;
+                            &lt;div class="value" id="totalCost"&gt;$0.00&lt;/div&gt;
+                        &lt;/div&gt;
+                        &lt;div class="result-item"&gt;
+                            &lt;div class="label"&gt;Recommended Quote&lt;/div&gt;
+                            &lt;div class="value highlight" id="quotePrice"&gt;$0.00&lt;/div&gt;
+                        &lt;/div&gt;
+                        &lt;div class="result-item"&gt;
+                            &lt;div class="label"&gt;Projected Profit&lt;/div&gt;
+                            &lt;div class="value profit" id="profit"&gt;$0.00&lt;/div&gt;
+                        &lt;/div&gt;
+                        &lt;div class="result-item"&gt;
+                            &lt;div class="label"&gt;Gross Margin&lt;/div&gt;
+                            &lt;div class="value" id="displayMargin"&gt;0%&lt;/div&gt;
+                        &lt;/div&gt;
+                    &lt;/div&gt;
+                &lt;/div&gt;
+                &lt;p id="errorMsg" style="color: #f72585; text-align: center; margin-top: 20px; display: none; font-weight: 600;"&gt;&lt;/p&gt;
+            &lt;/div&gt;
+        &lt;/div&gt;
+    &lt;/section&gt;
+
+    &lt;section id="pricing" class="pricing-section"&gt;
+        &lt;div class="container"&gt;
+            &lt;div class="section-title"&gt;
+                &lt;h2 style="color: white;"&gt;Get the Customized Excel Workbook&lt;/h2&gt;
+                &lt;p style="color: rgba(255,255,255,0.7);"&gt;Take your estimating to the next level with a professional, automated tool built just for your business.&lt;/p&gt;
+            &lt;/div&gt;
+            &lt;div class="pricing-card"&gt;
+                &lt;div class="pricing-badge"&gt;ONE-TIME&lt;/div&gt;
+                &lt;h3&gt;Customized Excel Estimating &amp;amp; Customer Quote Workbook&lt;/h3&gt;
+                &lt;div class="price"&gt;&lt;sup&gt;$&lt;/sup&gt;79&lt;/div&gt;
+                &lt;div class="price-sub"&gt;One-time payment • Lifetime access &lt;span style="margin: 0 8px;"&gt;•&lt;/span&gt; No subscriptions&lt;/div&gt;
+                &lt;ul class="pricing-features"&gt;
+                    &lt;li&gt;Automated cost calculations with formulas&lt;/li&gt;
+                    &lt;li&gt;Customer-ready professional quote generation&lt;/li&gt;
+                    &lt;li&gt;Materials, labor, expenses &amp;amp; overhead tracking&lt;/li&gt;
+                    &lt;li&gt;Customized to your business needs&lt;/li&gt;
+                    &lt;li&gt;Instant digital delivery — start using today&lt;/li&gt;
+                    &lt;li&gt;No recurring fees, no hidden costs&lt;/li&gt;
+                &lt;/ul&gt;
+                &lt;a href="mailto:twentyseedhq@gmail.com?subject=Excel%20Workbook%20Inquiry&amp;body=Hi%20TwentySeed%20Digital%2C%0A%0AI%27m%20interested%20in%20purchasing%20the%20Customized%20Excel%20Estimating%20and%20Customer%20Quote%20Workbook%20for%20%2479.%0A%0APlease%20send%20me%20more%20details%20and%20next%20steps.%0A%0AThank%20you!" class="btn btn-cta" style="width: 100%; display: block; text-align: center; font-size: 1.2rem;"&gt;📧 Inquire Now — Email Us&lt;/a&gt;
+                &lt;p style="margin-top: 20px; font-size: 0.9rem; color: #888;"&gt;Click to open your email client with pre-filled inquiry&lt;/p&gt;
+            &lt;/div&gt;
+        &lt;/div&gt;
+    &lt;/section&gt;
+
+    &lt;footer class="footer"&gt;
+        &lt;div class="container"&gt;
+            &lt;p&gt;&amp;copy; 2026 TwentySeed Digital. All rights reserved.&lt;/p&gt;
+            &lt;p style="margin-top: 8px;"&gt;Questions? &lt;a href="mailto:twentyseedhq@gmail.com"&gt;twentyseedhq@gmail.com&lt;/a&gt;&lt;/p&gt;
+        &lt;/div&gt;
+    &lt;/footer&gt;
+
+    &lt;script&gt;
+        function formatCurrency(num) {
+            return '$' + num.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+        }
+
+        function calculate() {
+            var materials = parseFloat(document.getElementById('materials').value) || 0;
+            var laborHours = parseFloat(document.getElementById('laborHours').value) || 0;
+            var hourlyCost = parseFloat(document.getElementById('hourlyCost').value) || 0;
+            var otherExpenses = parseFloat(document.getElementById('otherExpenses').value) || 0;
+            var overhead = parseFloat(document.getElementById('overhead').value) || 0;
+            var targetMargin = parseFloat(document.getElementById('targetMargin').value) || 0;
+            var errorMsg = document.getElementById('errorMsg');
+            var results = document.getElementById('results');
+
+            // Clear previous errors
+            document.querySelectorAll('.form-group input').forEach(function(input) {
+                input.classList.remove('error');
+            });
+
+            // Validation
+            var hasError = false;
+            var inputs = document.querySelectorAll('.form-group input');
+            inputs.forEach(function(input) {
+                if (input.value !== '' && isNaN(parseFloat(input.value))) {
+                    input.classList.add('error');
+                    hasError = true;
+                }
+            });
+
+            if (targetMargin &lt; 0 || targetMargin &gt;= 100) {
+                document.getElementById('targetMargin').classList.add('error');
+                errorMsg.textContent = 'Target Gross Margin must be between 0 and 99.99%.';
+                errorMsg.style.display = 'block';
+                results.style.display = 'none';
+                return;
+            }
+
+ if (materials &lt; 0 || laborHours &lt; 0 || hourlyCost &lt; 0 || otherExpenses &lt; 0 || overhead &lt; 0) {
+                errorMsg.textContent = 'All cost values must be non-negative.';
+                errorMsg.style.display = 'block';
+                results.style.display = 'none';
+                return;
+            }
+
+            errorMsg.style.display = 'none';
+
+            // Calculations
+            var laborCost = laborHours * hourlyCost;
+            var totalCost = materials + laborCost + otherExpenses + overhead;
+            var marginDecimal = targetMargin / 100;
+
+            var quotePrice = 0;
+ if (marginDecimal &lt; 1) {
+                quotePrice = totalCost / (1 - marginDecimal);
+            } else {
+                errorMsg.textContent = 'Margin must be less than 100%.';
+                errorMsg.style.display = 'block';
+                results.style.display = 'none';
+                return;
+            }
+
+            var profit = quotePrice - totalCost;
+
+            // Display results
+            document.getElementById('totalCost').textContent = formatCurrency(totalCost);
+            document.getElementById('quotePrice').textContent = formatCurrency(quotePrice);
+            document.getElementById('profit').textContent = formatCurrency(profit);
+            document.getElementById('displayMargin').textContent = targetMargin.toFixed(1) + '%';
+            results.style.display = 'block';
+        }
+
+        // Allow Enter key to trigger calculation
+        document.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                calculate();
+            }
+        });
+
+        // Remove error styling on input change
+        document.querySelectorAll('.form-group input').forEach(function(input) {
+            input.addEventListener('input', function() {
+                this.classList.remove('error');
+                document.getElementById('errorMsg').style.display = 'none';
+            });
+        });
+    &lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;
