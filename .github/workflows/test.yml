@@ -23,7 +23,5 @@ jobs:
           node --check packets.js
           node --check tests/packets.test.cjs
           node --check tests/print-integrity.test.cjs
-          node --check tests/billing.test.cjs
-          node --check tests/email-schedule.test.cjs
       - name: Test worksheet generators
         run: node --test tests/*.test.cjs
