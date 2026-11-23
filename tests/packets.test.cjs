@@ -38,3 +38,13 @@ test('five-day two-student packet creates separate worksheets and valid keys',()
 test('packet rejects invalid day counts',()=>{
  for(const days of [0,8,1.5,NaN])assert.throws(()=>buildPacket([{name:'A',kinds:['Arithmetic']}],days,()=>({})),/Invalid packet/);
 });
+
+test('profile categories and custom words are validated before persistence',()=>{
+ const p=createProfiles(storage());
+ assert.throws(()=>p.add({name:'Child',kinds:['Unknown generator']}),/Valid worksheet category/);
+ const [student]=p.add({name:'Child',kinds:['Arithmetic','Unknown generator','Arithmetic'],words:['  apple  ',42,' ', 'x'.repeat(200)]});
+ assert.deepEqual(student.kinds,['Arithmetic']);
+ assert.equal(student.words[0],'apple');
+ assert.equal(student.words.length,2);
+ assert.equal(student.words[1].length,120);
+});
