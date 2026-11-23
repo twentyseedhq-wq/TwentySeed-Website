@@ -11,7 +11,7 @@ test('crossword clue answers are recoverable from printed key, with valid crossi
   assert.equal(answerGrid.length,cells.length);
   for(const entry of placed){
    assert.ok(entry.clue.length>4);
-   assert.match(sheet.q,new RegExp(entry.number+'\\. '+entry.clue.replace(/[.*+?^$()|[\]{}\\]/g,'\\$&')));
+   assert.ok(sheet.q.includes(entry.number+'. '+entry.clue));
    for(let j=0;j<entry.word.length;j++){
     const y=entry.row+j*entry.dr,x=entry.col+j*entry.dc;
     assert.equal(cells[y][x],entry.word[j]);
