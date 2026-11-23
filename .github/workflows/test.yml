@@ -19,5 +19,8 @@ jobs:
         run: |
           node --check engine.js
           node --check tests/generators.test.cjs
+          node --check profiles.js
+          node --check packets.js
+          node --check tests/packets.test.cjs
       - name: Test worksheet generators
-        run: node --test tests/generators.test.cjs
+        run: node --test tests/*.test.cjs
