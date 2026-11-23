@@ -1,0 +1,21 @@
+const assert=require('node:assert/strict');const billing=require('./billing-sandbox');
+let now='2026-01-31T12:00:00Z';const m=new Map();const store={getItem:k=>m.get(k)||null,setItem:(k,v)=>m.set(k,v),removeItem:k=>m.delete(k)};
+const b=billing(store,()=>new Date(now));let count=0;function test(f){f();count++}
+test(()=>assert.equal(b.current().plan,'free'));
+test(()=>assert.equal(b.access(),false));
+test(()=>assert.throws(()=>b.subscribe('invalid'),/Unknown plan/));
+test(()=>assert.equal(b.subscribe('family').renewsAt,'2026-02-28T12:00:00.000Z'));
+test(()=>assert.equal(b.access(),true));
+test(()=>assert.equal(b.current().sandbox,true));
+test(()=>assert.equal(b.current().plan,'family'));
+test(()=>assert.equal(b.cancel().status,'canceled'));
+test(()=>assert.equal(b.access(),true));
+now='2026-02-28T12:00:00Z';test(()=>assert.equal(b.access(),false));
+test(()=>assert.equal(b.subscribe('free').renewsAt,null));
+test(()=>assert.equal(b.access(),false));
+test(()=>assert.equal(b.cancel().plan,'free'));
+test(()=>assert.equal(b.subscribe('family').status,'active'));
+test(()=>assert.equal(b.current().renewsAt,'2026-03-28T12:00:00.000Z'));
+test(()=>{b.reset();assert.equal(b.current().plan,'free')});
+test(()=>{store.setItem('twentyseed.billing.sandbox.v1','{');assert.equal(b.current().plan,'free')});
+console.log(`${count} billing sandbox assertions passed`);
