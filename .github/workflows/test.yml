@@ -1,0 +1,23 @@
+name: Worksheet regression tests
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  generators:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Validate JavaScript syntax
+        run: |
+          node --check engine.js
+          node --check tests/generators.test.cjs
+      - name: Test worksheet generators
+        run: node --test tests/generators.test.cjs
