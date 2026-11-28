@@ -8,7 +8,32 @@ const engines={
 'Telling time':({n,max})=>pack('Write the digital time.',make(n,()=>{let h=r(12),m=(r(max===10?2:12)-1)*(max===10?30:5);return item(`${m} minutes after ${h} o’clock${blank}`,`${h}:${String(m).padStart(2,'0')}`)})),
 'Money':({n,max})=>pack('Find the total value in cents.',make(n,()=>{let a=r(Math.min(max,12)),b=r(10);return item(`${a} quarters + ${b} dimes${blank} cents`,25*a+10*b)})),
 'Geometry':({n,max})=>pack('Find the area of each rectangle in square units.',make(n,()=>{let a=r(max),b=r(max);return item(`Length ${a}, width ${b}${blank}`,a*b)})),
-'Word search':({words})=>{let ws=[...new Set(words.map(w=>w.toUpperCase().replace(/[^A-Z]/g,'')).filter(w=>w.length>=2&&w.length<=15))].slice(0,10);if(!ws.length)ws=['APPLE','GARDEN'];let size=15,grid=make(size,()=>Array(size).fill('')),ans=[];ws.forEach((w,i)=>{let col=r(size-w.length+1)-1;for(let j=0;j<w.length;j++)grid[i][col+j]=w[j];ans.push(`${w}: row ${i+1}, columns ${col+1}–${col+w.length}`)});return pack('Find these words: '+ws.join(', '),[item(grid.map(row=>row.map(c=>c||String.fromCharCode(64+r(26))).join('  ')).join('\n'),ans.join('\n'))])}
+'Word search':({words})=>{
+ let ws=[...new Set(words.map(w=>w.toUpperCase().replace(/[^A-Z]/g,'' )).filter(w=>w.length>=2&&w.length<=15))].slice(0,10);
+ if(!ws.length)ws=['APPLE','GARDEN'];
+ const size=15,dirs=[[0,1],[1,0],[1,1],[1,-1],[0,-1],[-1,0],[-1,-1],[-1,1]];
+ let grid,placed;
+ for(let attempt=0;attempt<20;attempt++){
+ grid=make(size,()=>Array(size).fill(''));placed=[];
+ for(const w of [...ws].sort((a,b)=>b.length-a.length)){
+ const options=[];
+ for(let y=0;y<size;y++)for(let x=0;x<size;x++)for(const [dy,dx] of dirs){
+ const ey=y+dy*(w.length-1),ex=x+dx*(w.length-1);
+ if(ey<0||ey>=size||ex<0||ex>=size)continue;
+ if([...w].every((c,i)=>!grid[y+i*dy][x+i*dx]||grid[y+i*dy][x+i*dx]===c))options.push([y,x,dy,dx,ey,ex]);
+ }
+ if(!options.length)break;
+ const [y,x,dy,dx,ey,ex]=options[r(options.length)-1];
+ [...w].forEach((c,i)=>grid[y+i*dy][x+i*dx]=c);
+ placed.push({word:w,row:y,col:x,dr:dy,dc:dx,endRow:ey,endCol:ex});
+ }
+ if(placed.length===ws.length)break;
+ }
+ if(placed.length!==ws.length){grid=make(size,()=>Array(size).fill(''));placed=ws.map((w,y)=>{[...w].forEach((c,x)=>grid[y][x]=c);return {word:w,row:y,col:0,dr:0,dc:1,endRow:y,endCol:w.length-1}})}
+ grid=grid.map(row=>row.map(c=>c||String.fromCharCode(64+r(26))));
+ const ans=placed.map(e=>e.word+': row '+(e.row+1)+', column '+(e.col+1)+' → row '+(e.endRow+1)+', column '+(e.endCol+1));
+ return {...pack('Find these words: '+ws.join(', '),[item(grid.map(row=>row.join('  ')).join('\n'),ans.join('\n'))]),grid,placed};
+}
 };
 function crossword(){
  const variants=[
